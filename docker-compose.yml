@@ -1,0 +1,56 @@
+services:
+  backend: &backend-common
+    build: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=${DB_HOST:-postgres}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_NAME=${DB_NAME:-postgres}
+      - ML_SERVICE_HOST=${ML_SERVICE_HOST:-ml_service}
+      - ML_SERVICE_PORT=${ML_SERVICE_PORT:-8080}
+    depends_on:
+      - postgres
+    networks:
+      - ai_interview_net
+
+  ml_service: &ml-service-common
+    build: ml_service
+    ports:
+      - ${ML_SERVICE_PORT}:${ML_SERVICE_PORT}
+    environment:
+      - GIGACHAT_API_KEY=${GIGACHAT_API_KEY}
+    networks:
+      - ai_interview_net
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ai_interview_net
+
+  backend_tests:
+    !!merge <<: *backend-common
+    ports:
+      - "8001:8001"
+    entrypoint: "poetry run python -m unittest"
+
+  ml_service_tests:
+    !!merge <<: *ml-service-common
+    ports:
+      - "8081:8081"
+    entrypoint: "poetry run python -m unittest"
+
+volumes:
+  postgres_data:
+
+networks:
+  ai_interview_net:
+    name: ai_interview_net
