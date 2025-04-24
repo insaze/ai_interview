@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   backend-tests:
-    name: Run Backend Tests
+    name: Build / Run / Test Backend
     runs-on: ubuntu-latest
     env:
       DB_HOST: postgres
@@ -22,7 +22,8 @@ jobs:
       DB_NAME: postgres
       ML_SERVICE_HOST: ml_service
       ML_SERVICE_PORT: 8080
-      
+      APP_PORT: 8000
+
     steps:
       - uses: actions/checkout@v4
       
@@ -45,6 +46,15 @@ jobs:
       
       - name: Run backend tests
         run: docker-compose --profile tests run backend_tests
+
+      - name: Ping backend
+        run: |
+          RESPONSE=$(curl -s http://localhost:$APP_PORT/ping)
+          echo "Response from /ping: $RESPONSE"
+          if [ "$RESPONSE" != "pong" ]; then
+            echo "::error::/ping endpoint check failed"
+            exit 1
+          fi
       
       - name: Stop containers
         if: always()
@@ -72,7 +82,7 @@ jobs:
         working-directory: frontend/interview-app
 
   frontend-build-and-deploy:
-    name: Build and Deploy
+    name: Build / Deploy Frontend
     needs: frontend-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'

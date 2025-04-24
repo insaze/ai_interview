@@ -9,6 +9,10 @@ from .database import get_db
 app = FastAPI()
 
 
+@app.get('/ping')
+def ping():
+    return "pong"
+
 @app.post('/interviews', response_model=schemas.Interview)
 def create_interview(interview: schemas.InterviewCreate, db: Session = Depends(get_db)):
     db_interview = crud.create_interview(db, vacancy_link=interview.vacancy_link)
