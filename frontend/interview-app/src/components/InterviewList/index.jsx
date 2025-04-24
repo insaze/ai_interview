@@ -10,8 +10,12 @@ const InterviewList = ({ interviews, onCreateInterview }) => {
     if (!newInterviewUrl) return;
     setLoading(true);
     try {
-      await onCreateInterview(newInterviewUrl);
-      setNewInterviewUrl('');
+      const result = await onCreateInterview(newInterviewUrl);
+      if (result) {
+        setNewInterviewUrl('');
+      } else {
+        console.log('Interview creation failed (see errors above)');
+      }
     } finally {
       setLoading(false);
     }

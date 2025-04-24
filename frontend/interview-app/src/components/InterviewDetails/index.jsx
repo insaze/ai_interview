@@ -14,7 +14,10 @@ const InterviewDetails = ({ interview, onAnswerSubmit }) => {
     
     setLoadingStates(prev => ({ ...prev, [taskId]: true }));
     try {
-      await onAnswerSubmit(taskId, answers[taskId]);
+      const result = await onAnswerSubmit(taskId, answers[taskId]);
+      if (!result) {
+        console.log('Answer submission failed (see errors above)');
+      }
     } finally {
       setLoadingStates(prev => ({ ...prev, [taskId]: false }));
     }

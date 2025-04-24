@@ -5,19 +5,38 @@ import { fetchInterviews, createInterview } from '../api/interviews';
 
 const InterviewsPage = () => {
   const [interviews, setInterviews] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadInterviews = async () => {
-      const data = await fetchInterviews();
-      setInterviews(data);
+      try {
+        const data = await fetchInterviews();
+        setInterviews(data || []);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load interviews');
+        setInterviews([]);
+      }
     };
     loadInterviews();
   }, []);
 
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   const handleCreateInterview = async (url) => {
-    const newInterview = await createInterview(url);
-    navigate(`/interviews/${newInterview.id}`);
+    try {
+      const newInterview = await createInterview(url);
+      if (newInterview && newInterview.id) {
+        navigate(`/interviews/${newInterview.id}`);
+      } else {
+        console.error('Invalid interview data received:', newInterview);
+      }
+    } catch (error) {
+      console.error('Error creating interview:', error);
+    }
   };
 
   return (
