@@ -10,7 +10,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://itookyourboo.github.io/ai_interview",
+  "homepage": "https://insaze.github.io/ai_interview",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -b main -d build",
