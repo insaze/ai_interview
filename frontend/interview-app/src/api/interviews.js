@@ -31,7 +31,7 @@ export const createInterview = async (url) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ vacancy_link: url }),
     });
     return await handleResponse(response);
   } catch (error) {

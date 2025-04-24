@@ -22,10 +22,6 @@ const InterviewsPage = () => {
     loadInterviews();
   }, []);
 
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
   const handleCreateInterview = async (url) => {
     try {
       const newInterview = await createInterview(url);
@@ -39,12 +35,21 @@ const InterviewsPage = () => {
     }
   };
 
+  const handleInterviewClick = (id) => {
+    navigate(`/interviews/${id}`);
+  };
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   return (
     <div>
       <h1>Interviews</h1>
       <InterviewList 
         interviews={interviews} 
-        onCreateInterview={handleCreateInterview} 
+        onCreateInterview={handleCreateInterview}
+        onInterviewClick={handleInterviewClick}
       />
     </div>
   );

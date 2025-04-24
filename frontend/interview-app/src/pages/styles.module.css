@@ -1,0 +1,274 @@
+.meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .meta a {
+    color: #0066cc;
+    text-decoration: none;
+  }
+  
+  .meta a:hover {
+    text-decoration: underline;
+  }
+
+  /* styles.module.css */
+
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.header {
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem 0;
+  color: #222;
+}
+
+.company {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #555;
+  margin: 0 0 0.8rem 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.metaItem {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.metaLabel {
+  font-weight: 600;
+  color: #444;
+}
+
+.vacancyLink {
+  margin-left: auto;
+  font-weight: 600;
+  color: #007acc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.vacancyLink:hover,
+.vacancyLink:focus {
+  color: #005fa3;
+  text-decoration: underline;
+}
+
+.descriptionSection,
+.questionsSection {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #007acc;
+  padding-bottom: 0.3rem;
+  color: #007acc;
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #444;
+  white-space: pre-wrap;
+}
+
+.questionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.questionCard {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.questionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.questionText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #222;
+}
+
+.scoreBadge {
+  background-color: #007acc;
+  color: white;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.answerInput {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.6rem 0.8rem;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+
+.answerInput:focus {
+  border-color: #007acc;
+  outline: none;
+  background-color: #fff;
+}
+
+.errorInput {
+  border-color: #e55353 !important;
+  background-color: #ffe6e6;
+}
+
+.errorText {
+  color: #e55353;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  font-weight: 600;
+}
+
+.actions {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  background-color: #007acc;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.submitButton:disabled {
+  background-color: #a0c4e8;
+  cursor: not-allowed;
+}
+
+.submitButton:hover:not(:disabled),
+.submitButton:focus:not(:disabled) {
+  background-color: #005fa3;
+  outline: none;
+}
+
+.feedbackContainer {
+  margin-top: 1rem;
+  background-color: #e6f0ff;
+  border-left: 4px solid #007acc;
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+}
+
+.feedbackTitle {
+  font-weight: 700;
+  margin: 0 0 0.3rem 0;
+  color: #005fa3;
+}
+
+.feedbackText {
+  margin: 0;
+  font-size: 1rem;
+  color: #004080;
+  white-space: pre-wrap;
+}
+
+.noQuestions {
+  font-style: italic;
+  color: #666;
+  font-size: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Loading spinner */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 0;
+  color: #007acc;
+}
+
+.spinner {
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #007acc;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error container */
+.errorContainer {
+  padding: 2rem;
+  background-color: #ffe6e6;
+  border: 1px solid #e55353;
+  border-radius: 6px;
+  max-width: 600px;
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.errorText {
+  color: #e55353;
+  font-weight: 700;
+  font-size: 1.1rem;
+}

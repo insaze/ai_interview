@@ -54,3 +54,34 @@
     background-color: #cccccc;
     cursor: not-allowed;
   }
+
+  .interviewLink {
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.2s;
+  }
+  
+  .interviewLink:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .interviewTitle {
+    font-weight: 500;
+    display: block;
+  }
+  
+  .interviewCompany {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .listItem {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0.5rem;
+  }
+  
+  .listItem:last-child {
+    border-bottom: none;
+  }
