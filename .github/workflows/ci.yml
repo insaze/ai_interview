@@ -11,6 +11,36 @@ permissions:
   contents: write
 
 jobs:
+  backend-tests:
+    name: Run Backend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Compose
+        run: |
+          docker-compose version
+      
+      - name: Start test environment
+        run: docker-compose -f docker-compose.yml up -d postgres
+      
+      - name: Wait for PostgreSQL
+        run: |
+          timeout 30s bash -c 'until docker-compose exec -T postgres pg_isready; do sleep 2; done'
+      
+      - name: Run backend tests
+        run: docker-compose --profile tests run backend_tests
+        env:
+          DB_HOST: postgres
+          DB_PORT: 5432
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+          DB_NAME: postgres
+      
+      - name: Stop containers
+        if: always()
+        run: docker-compose down
+  
   frontend-test:
     name: Run Frontend Tests
     runs-on: ubuntu-latest
