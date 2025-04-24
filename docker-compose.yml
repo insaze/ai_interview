@@ -1,13 +1,13 @@
 services:
   backend: &backend-common
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
-    interval: 5s
-    timeout: 3s
-    retries: 3
     build: backend
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
     environment:
       - DB_USERNAME=${DB_USERNAME:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
