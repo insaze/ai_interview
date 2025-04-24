@@ -49,7 +49,7 @@ jobs:
 
       - name: Ping backend
         run: |
-          RESPONSE=$(curl -s http://localhost:$APP_PORT/ping)
+          RESPONSE=$(curl -s http://localhost:8000/ping)
           echo "Response from /ping: $RESPONSE"
           if [ "$RESPONSE" != "pong" ]; then
             echo "::error::/ping endpoint check failed"
