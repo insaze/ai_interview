@@ -40,12 +40,16 @@ services:
     !!merge <<: *backend-common
     ports:
       - "8001:8001"
+    profiles:
+      - tests
     entrypoint: "poetry run python -m unittest"
 
   ml_service_tests:
     !!merge <<: *ml-service-common
     ports:
       - "8081:8081"
+    profiles:
+      - tests
     entrypoint: "poetry run python -m unittest"
 
 volumes:
