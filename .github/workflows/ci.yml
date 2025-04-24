@@ -14,6 +14,15 @@ jobs:
   backend-tests:
     name: Run Backend Tests
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+      ML_SERVICE_HOST: ml_service
+      ML_SERVICE_PORT: 8080
+      
     steps:
       - uses: actions/checkout@v4
       
@@ -36,12 +45,6 @@ jobs:
       
       - name: Run backend tests
         run: docker-compose --profile tests run backend_tests
-        env:
-          DB_HOST: postgres
-          DB_PORT: 5432
-          DB_USERNAME: postgres
-          DB_PASSWORD: postgres
-          DB_NAME: postgres
       
       - name: Stop containers
         if: always()
