@@ -38,11 +38,14 @@ def get_interview(db: Session, interview_id: int) -> models.Interview | None:
     return db.query(models.Interview).filter(models.Interview.id == interview_id).first()
 
 
-def delete_interview(db: Session, interview_id: int):
+def delete_interview(db: Session, interview_id: int) -> models.Interview | None:
     db_interview = get_interview(db, interview_id=interview_id)
-    if db_interview:
-        db.delete(db_interview)
-        db.commit()
+    if not db_interview:
+        return None
+
+    db.delete(db_interview)
+    db.commit()
+    return db_interview
 
 
 def create_task(db: Session, interview_id: int, question: str) -> models.Task:
