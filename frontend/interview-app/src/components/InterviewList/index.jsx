@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './styles.module.css';
-import { createInterview } from '../../api/interviews';
 
 const InterviewList = ({ interviews, onCreateInterview }) => {
   const [newInterviewUrl, setNewInterviewUrl] = useState('');
