@@ -13,14 +13,17 @@ jobs:
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
+        working-direcotry: frontend/interview-app
         with:
           node-version: 20
           cache: 'npm'
       
       - name: Install dependencies
+        working-direcotry: frontend/interview-app
         run: npm ci
       
       - name: Run tests
+        working-direcotry: frontend/interview-app
         run: npm test -- --watchAll=false --coverage
 
   frontend-build-and-deploy:
@@ -34,18 +37,22 @@ jobs:
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
+        working-direcotry: frontend/interview-app
         with:
           node-version: 20
           cache: 'npm'
       
       - name: Install dependencies
+        working-direcotry: frontend/interview-app
         run: npm ci
       
       - name: Build project
+        working-direcotry: frontend/interview-app
         run: npm run build
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
+        working-direcotry: frontend/interview-app
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
