@@ -2,7 +2,7 @@ name: CI Build, Test & Deploy
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ master ]
 
 jobs:
   frontend-test:
@@ -25,9 +25,9 @@ jobs:
 
   frontend-build-and-deploy:
     name: Build and Deploy
-    needs: test
+    needs: frontend-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     
     steps:
       - uses: actions/checkout@v4
