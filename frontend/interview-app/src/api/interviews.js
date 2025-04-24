@@ -68,3 +68,18 @@ export const validateTaskAnswer = async (taskId, answer) => {
     };
   }
 };
+
+export const deleteInterview = async (interviewId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/interviews/${interviewId}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete interview');
+    }
+    return true;
+  } catch (error) {
+    console.error(`Error deleting interview ${interviewId}:`, error);
+    throw error;
+  }
+};

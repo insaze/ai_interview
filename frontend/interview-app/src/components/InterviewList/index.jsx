@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Changed from <a> to <Link>
+import { Link } from 'react-router-dom';  // Using Link for navigation
 import styles from './styles.module.css';
 
-const InterviewList = ({ interviews, onCreateInterview }) => {
+const InterviewList = ({ interviews, onCreateInterview, onDeleteInterview }) => {
   const [newInterviewUrl, setNewInterviewUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [deletingIds, setDeletingIds] = useState(new Set());
 
   const handleCreate = async () => {
     if (!newInterviewUrl.trim()) {
@@ -28,6 +29,28 @@ const InterviewList = ({ interviews, onCreateInterview }) => {
     }
   };
 
+  const handleDelete = async (id, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!window.confirm('Are you sure you want to delete this interview?')) {
+      return;
+    }
+
+    setDeletingIds(prev => new Set(prev).add(id));
+    try {
+      await onDeleteInterview(id);
+    } catch (err) {
+      alert(err.message || 'Failed to delete interview');
+    } finally {
+      setDeletingIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Your Interviews</h1>
@@ -46,6 +69,15 @@ const InterviewList = ({ interviews, onCreateInterview }) => {
                 <span className={styles.interviewCompany}>{interview.company}</span>
                 <span className={styles.interviewExperience}>{interview.experience}</span>
               </Link>
+              <button
+                className={styles.deleteButton}
+                onClick={(e) => handleDelete(interview.id, e)}
+                disabled={deletingIds.has(interview.id)}
+                aria-label={`Delete interview ${interview.title}`}
+                type="button"
+              >
+                {deletingIds.has(interview.id) ? 'Deleting...' : 'Delete'}
+              </button>
             </li>
           ))}
         </ul>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InterviewList from '../components/InterviewList';
-import { fetchInterviews, createInterview } from '../api/interviews';
+import { fetchInterviews, createInterview, deleteInterview } from '../api/interviews';
 
 const InterviewsPage = () => {
   const [interviews, setInterviews] = useState([]);
@@ -35,6 +35,11 @@ const InterviewsPage = () => {
     }
   };
 
+  const handleDeleteInterview = async (id) => {
+    await deleteInterview(id);
+    setInterviews(prev => prev.filter(i => i.id !== id));
+  };
+
   const handleInterviewClick = (id) => {
     navigate(`/interviews/${id}`);
   };
@@ -50,6 +55,7 @@ const InterviewsPage = () => {
         interviews={interviews} 
         onCreateInterview={handleCreateInterview}
         onInterviewClick={handleInterviewClick}
+        onDeleteInterview={handleDeleteInterview}
       />
     </div>
   );

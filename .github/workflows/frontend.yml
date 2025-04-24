@@ -1,0 +1,58 @@
+name: Backend / Frontend CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  frontend-build:
+    name: Build / Test / Deploy Frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'frontend/interview-app/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend/interview-app
+      
+      - name: Build project
+        run: npm run build
+        working-directory: frontend/interview-app
+  
+  frontend-test:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'frontend/interview-app/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend/interview-app
+      
+      - name: Run tests
+        run: npm test -- --watchAll=false --coverage
+        working-directory: frontend/interview-app

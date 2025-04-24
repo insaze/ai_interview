@@ -85,3 +85,28 @@
   .listItem:last-child {
     border-bottom: none;
   }
+
+  .deleteButton {
+    margin-left: 1rem;
+    background-color: #e55353;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .deleteButton:disabled {
+    background-color: #f5a9a9;
+    cursor: not-allowed;
+  }
+  
+  .deleteButton:hover:not(:disabled),
+  .deleteButton:focus:not(:disabled) {
+    background-color: #b00000;
+    outline: none;
+  }
+  
