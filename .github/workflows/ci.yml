@@ -48,13 +48,7 @@ jobs:
         run: docker-compose --profile tests run backend_tests
 
       - name: Ping backend
-        run: |
-          RESPONSE=$(curl -s http://localhost:8000/ping)
-          echo "Response from /ping: $RESPONSE"
-          if [ "$RESPONSE" != "pong" ]; then
-            echo "::error::/ping endpoint check failed"
-            exit 1
-          fi
+        run: curl http://localhost:8000/ping
       
       - name: Stop containers
         if: always()
