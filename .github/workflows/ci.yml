@@ -48,7 +48,7 @@ jobs:
         run: docker-compose --profile tests run backend_tests
 
       - name: Ping backend
-        run: curl http://localhost:8000/ping
+        run: curl http://host.docker.internal:8000/ping
       
       - name: Stop containers
         if: always()
