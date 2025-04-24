@@ -2,9 +2,7 @@ name: CI Build, Test & Deploy
 
 on:
   push:
-    branches: [ main, master ] # Runs on push to main/master
-  pull_request:
-    branches: [ main, master ] # Runs on PRs targeting main/master
+    branches: [ main, master ]
 
 jobs:
   frontend-test:
@@ -16,7 +14,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # or your preferred version
+          node-version: 20
           cache: 'npm'
       
       - name: Install dependencies
