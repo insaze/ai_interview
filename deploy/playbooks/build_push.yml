@@ -1,5 +1,5 @@
 ---
-- name: Provision the virtual machine
+- name: Build image and push to Docker Hub
   hosts: all
   become: yes
   vars_files:

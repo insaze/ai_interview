@@ -1,5 +1,5 @@
 ---
-- name: Provision the virtual machine
+- name: Configure machine
   hosts: all
   become: yes
   vars_files:
