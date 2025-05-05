@@ -1,0 +1,97 @@
+---
+- name: Provision the virtual machine
+  hosts: all
+  become: yes
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages for Docker
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        state: present
+
+    - name: Update apt cache after adding Docker repository
+      apt:
+        update_cache: yes
+
+    - name: Install Docker using convenience script
+      shell: |
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Ensure Docker service is running and enabled
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add current user to the Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/latest/download/docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }}"
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Verify Docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Debug Docker version
+      debug:
+        msg: "{{ docker_version.stdout }}"
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone project repository
+      git:
+        repo: "{{ git_repo }}"
+        dest: "{{ project_dir }}"
+        version: "{{ git_branch }}"
+        clone: yes
+        update: yes
+
+    - name: Log in to Docker Hub
+      docker_login:
+        username: "{{ docker_hub_username }}"
+        password: "{{ docker_hub_password }}"
+
+    - name: Build Docker image for {{ item.key }}
+      command: >
+        docker build -t {{ docker_hub_username }}/{{ item.value.name }}:latest {{ item.value.context }}
+      args:
+        chdir: "{{ project_dir }}"
+      loop: "{{ images | dict2items }}"
+
+    - name: Push Docker image for {{ item.key }} to Docker Hub
+      command: >
+        docker push {{ docker_hub_username }}/{{ item.value.name }}:latest
+      loop: "{{ images | dict2items }}"

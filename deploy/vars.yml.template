@@ -1,0 +1,16 @@
+git_repo: "https://github.com/insaze/ai_interview.git"
+git_branch: "master"
+project_dir: "/home/ubuntu/ai_interview"
+docker_hub_username: daskldmaslndas
+docker_hub_password: asldnsaldasjd
+
+images:
+  frontend:
+    name: frontend
+    context: "{{ project_dir }}/frontend/interview-app"
+  backend:
+    name: backend
+    context: "{{ project_dir }}/backend"
+  ml_service:
+    name: ml_service
+    context: "{{ project_dir }}/ml_service"
