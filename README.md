@@ -48,6 +48,14 @@ docker compose up ml_service_tests
 
 ### Сборка и сохранение образов в Docker Hub
 
+Перед запуском создайте ansible-vault и заполните его переменными из `vars.yml.template`
+
 ```shell
-ansible-playbook -i deploy/inventory.yml deploy/playbook.yml
+ansible-vault create vault.yml
+```
+
+Затем используйте опцию `--ask-vault-pass` при запуске playbook
+
+```shell
+ansible-playbook -i inventory.yml main.yml --ask-vault-pass
 ```
