@@ -1,8 +1,18 @@
-git_repo: "https://github.com/insaze/ai_interview.git"
-git_branch: "master"
-project_dir: "/home/ubuntu/ai_interview"
-docker_hub_username: daskldmaslndas
-docker_hub_password: asldnsaldasjd
+# use ansible-vault create vault.yml to create a vault
+# then run with 'ansible-playbook -i inventory.yml main.yml --ask-vault-pass'
+
+ssh_user: <your_user>
+ssh_private_key_file_path: <your_path>
+
+docker_hub_username: <your_user>
+docker_hub_password: <your_pass>
+
+git_repo: https://{{ github_user }}:{{ github_token }}@<your_link>
+git_branch: master
+github_user: <your_user>
+github_token: <your_token>
+
+project_dir: <dir_to_clone_to>
 
 images:
   frontend:
@@ -14,3 +24,5 @@ images:
   ml_service:
     name: ml_service
     context: "{{ project_dir }}/ml_service"
+
+deploy_env_file: ".env.yml"

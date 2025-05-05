@@ -1,0 +1,9 @@
+---
+- name: "Configure environment"
+  import_playbook: playbooks/configure.yml
+
+- name: Build / Push to Docker Hub
+  import_playbook: playbooks/build_push.yml
+
+- name: Run docker-compose
+  import_playbook: playbooks/deploy.yml

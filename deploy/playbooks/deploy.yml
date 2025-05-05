@@ -1,0 +1,25 @@
+---
+- name: Provision the virtual machine
+  hosts: all
+  become: yes
+  vars_files:
+    - ../vault.yml # ansible-vault create vault.yml
+  tasks:
+    - name: Read .env file
+      ansible.builtin.include_vars:
+        file: "{{ deploy_env_file }}"
+        name: env_vars
+      delegate_to: localhost
+      run_once: true
+
+    - name: Pull Docker image for {{ item.key }} from Docker Hub
+      command: >
+        docker push {{ docker_hub_username }}/{{ item.value.name }}:latest
+      loop: "{{ images | dict2items }}"
+    
+    - name: Run services
+      command: >
+        docker-compose up -d 
+      args:
+        chdir: "{{ project_dir }}"
+      environment: "{{ env_vars }}"
