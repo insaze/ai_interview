@@ -2,3 +2,4 @@
 .idea
 ./deploy/vars.yml
 ./data
+./deploy/vars/vars.yml

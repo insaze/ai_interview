@@ -14,7 +14,7 @@
 
     - name: Pull Docker image for {{ item.key }} from Docker Hub
       command: >
-        docker push {{ docker_hub_username }}/{{ item.value.name }}:latest
+        docker pull {{ docker_hub_username }}/{{ item.value.name }}:latest
       loop: "{{ images | dict2items }}"
     
     - name: Run services
