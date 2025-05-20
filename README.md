@@ -33,3 +33,29 @@ Backend, Postgres и ML Service находятся в одной сети
 docker compose up backend_tests
 docker compose up ml_service_tests
 ```
+
+## Деплой
+
+### Создание виртуальной машины
+
+Для создания виртуальной машины используется `multipass`. Запустить скрипт:
+
+```shell
+./deploy/create_vm.sh
+```
+
+Нужно заменить название SSH-ключа и IP-адрес виртуальной машины в `deploy/inventory.yml`
+
+### Сборка и сохранение образов в Docker Hub
+
+Перед запуском создайте ansible-vault и заполните его переменными из `vars.yml.template`
+
+```shell
+ansible-vault create vault.yml
+```
+
+Затем используйте опцию `--ask-vault-pass` при запуске playbook
+
+```shell
+ansible-playbook -i inventory.yml main.yml --ask-vault-pass
+```

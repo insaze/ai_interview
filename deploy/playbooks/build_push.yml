@@ -1,0 +1,18 @@
+---
+- name: Build image and push to Docker Hub
+  hosts: all
+  become: yes
+  vars_files:
+    - ../vault.yml # ansible-vault create vault.yml
+  tasks:
+    - name: Build Docker image for {{ item.key }}
+      command: >
+        docker build -t {{ docker_hub_username }}/{{ item.value.name }}:latest {{ item.value.context }}
+      args:
+        chdir: "{{ project_dir }}"
+      loop: "{{ images | dict2items }}"
+
+    - name: Push Docker image for {{ item.key }} to Docker Hub
+      command: >
+        docker push {{ docker_hub_username }}/{{ item.value.name }}:latest
+      loop: "{{ images | dict2items }}"
