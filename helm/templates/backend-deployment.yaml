@@ -1,0 +1,49 @@
+{{- if .Values.backend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.backend.image }}
+          ports:
+            - containerPort: {{ .Values.backend.port }}
+          env:
+            - name: DB_USERNAME
+              value: "{{ .Values.global.dbUsername }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.global.dbPassword }}"
+            - name: DB_HOST
+              value: "{{ .Values.global.dbHost }}"
+            - name: DB_PORT
+              value: "{{ .Values.global.dbPort }}"
+            - name: DB_NAME
+              value: "{{ .Values.global.dbName }}"
+            - name: ML_SERVICE_HOST
+              value: "{{ .Values.global.mlServiceHost }}"
+            - name: ML_SERVICE_PORT
+              value: "{{ .Values.global.mlServicePort }}"
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.backend.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+{{- end }}

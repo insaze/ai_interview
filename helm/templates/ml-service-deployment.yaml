@@ -1,0 +1,38 @@
+{{- if .Values.mlService.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ml-service
+  template:
+    metadata:
+      labels:
+        app: ml-service
+    spec:
+      containers:
+        - name: ml-service
+          image: {{ .Values.mlService.image }}
+          ports:
+            - containerPort: {{ .Values.mlService.port }}
+          env:
+            - name: GIGACHAT_API_KEY
+              value: "{{ .Values.mlService.gigachatApiKey }}"
+            - name: ML_SERVICE_HOST
+              value: "{{ .Values.global.mlServiceHost }}"
+            - name: ML_SERVICE_PORT
+              value: "{{ .Values.global.mlServicePort }}"
+            - name: DB_USERNAME
+              value: "{{ .Values.global.dbUsername }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.global.dbPassword }}"
+            - name: DB_HOST
+              value: "{{ .Values.global.dbHost }}"
+            - name: DB_PORT
+              value: "{{ .Values.global.dbPort }}"
+            - name: DB_NAME
+              value: "{{ .Values.global.dbName }}"
+{{- end }}
