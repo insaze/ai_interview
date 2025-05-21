@@ -20,19 +20,16 @@ jobs:
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Build and push Backend image
-        working-directory: backend
         run: |
-          docker build -t ${{ secrets.DOCKER_LOGIN }}/backend:latest .
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/backend:latest backend
           docker push ${{ secrets.DOCKER_LOGIN }}/backend:latest
 
       - name: Build and push Frontend image
-        working-directory: frontend
         run: |
-          docker build -t ${{ secrets.DOCKER_LOGIN }}/frontend:latest .
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/frontend:latest frontend/interview-app
           docker push ${{ secrets.DOCKER_LOGIN }}/frontend:latest
 
       - name: Build and push ML Service image
-        working-directory: ml_service
         run: |
-          docker build -t ${{ secrets.DOCKER_LOGIN }}/ml_service:latest .
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/ml_service:latest ml_service
           docker push ${{ secrets.DOCKER_LOGIN }}/ml_service:latest
