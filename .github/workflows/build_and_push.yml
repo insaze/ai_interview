@@ -1,6 +1,8 @@
 name: Build and Push Docker Images
 
 on:
+  pull_request:
+    branches: [ "master" ]
   workflow_dispatch:
 
 
