@@ -20,7 +20,10 @@ spec:
             - containerPort: {{ .Values.mlService.port }}
           env:
             - name: GIGACHAT_API_KEY
-              value: "{{ .Values.mlService.gigachatApiKey }}"
+              valueFrom:
+                secretKeyRef:
+                  name: gigachat2
+                  key: GIGACHAT_API_KEY
             - name: ML_SERVICE_HOST
               value: "{{ .Values.global.mlServiceHost }}"
             - name: ML_SERVICE_PORT

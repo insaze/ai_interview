@@ -1,11 +1,34 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import PlainTextResponse
+import time
 
 from . import crud, schemas
 from .database import get_db
 
+from prometheus_client import start_http_server, Counter, Histogram, generate_latest, REGISTRY
+start_http_server(9001)
+
+REQUEST_COUNT = Counter(
+    "http_requests_total",
+    "Total HTTP requests",
+    ["method", "endpoint", "status_code"]
+)
+
+REQUEST_LATENCY = Histogram(
+    "http_request_duration_seconds",
+    "HTTP request latency by status code",
+    ["method", "endpoint", "status_code"]
+)
+
+ERROR_COUNT = Counter(
+    "http_errors_total",
+    "Total HTTP errors",
+    ["method", "endpoint", "status_code", "error_type"]
+)
 
 app = FastAPI()
 
@@ -16,6 +39,50 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class MetricsMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        method = request.method
+        endpoint = request.url.path
+        start_time = time.time()
+        
+        try:
+            response = await call_next(request)
+        except Exception as e:
+            status_code = 500
+            ERROR_COUNT.labels(
+                method=method,
+                endpoint=endpoint,
+                status_code=str(status_code),
+                error_type="5xx"
+            ).inc()
+            raise e from None
+        else:
+            status_code = response.status_code
+            if status_code >= 400:
+                ERROR_COUNT.labels(
+                    method=method,
+                    endpoint=endpoint,
+                    status_code=str(status_code),
+                    error_type=f"{status_code//100}xx"
+                ).inc()
+        
+        latency = time.time() - start_time
+        REQUEST_LATENCY.labels(
+            method=method,
+            endpoint=endpoint,
+            status_code=str(status_code)
+        ).observe(latency)
+        
+        REQUEST_COUNT.labels(
+            method=method,
+            endpoint=endpoint,
+            status_code=str(status_code)
+        ).inc()
+        
+        return response
+
+app.add_middleware(MetricsMiddleware)
 
 @app.get('/ping')
 def ping():

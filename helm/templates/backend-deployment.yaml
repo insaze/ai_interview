@@ -10,6 +10,10 @@ spec:
       app: backend
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9001"
+        prometheus.io/path: "/metrics"
       labels:
         app: backend
     spec:
@@ -17,7 +21,10 @@ spec:
         - name: backend
           image: {{ .Values.backend.image }}
           ports:
-            - containerPort: {{ .Values.backend.port }}
+            - name: application
+              containerPort: {{ .Values.backend.port }}
+            - name: metrics
+              containerPort: 9001
           env:
             - name: DB_USERNAME
               value: "{{ .Values.global.dbUsername }}"

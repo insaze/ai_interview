@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: backend
+  labels:
+    release: monitoring  # Must match kube-prometheus-stack's release name
+spec:
+  selector:
+    matchLabels:
+      app: backend  # Targets services with this label
+  endpoints:
+  - port: metrics  # Matches the Service's port name
+    path: /metrics
