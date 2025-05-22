@@ -59,3 +59,33 @@ ansible-vault create vault.yml
 ```shell
 ansible-playbook -i inventory.yml main.yml --ask-vault-pass
 ```
+
+## Оркестрация
+
+### Установка minikube и Helm на MacOS
+
+```shell
+brew install minikube helm
+```
+
+Для масштабирования нужно включить Metrics Server
+
+```shell
+minikube addons enable metrics-server
+```
+
+### Запуск кластера
+
+```shell
+minikube start --driver=docker
+helm install ai-interview helm
+```
+
+Проверить статус кластера:
+
+```shell
+minikube status
+kubectl get pods
+kubectl get services
+kubectl get hpa
+```

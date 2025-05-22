@@ -1,0 +1,41 @@
+# Global configuration shared between services
+global:
+  dbUsername: "postgres"
+  dbPassword: "postgres"
+  dbName: "postgres"
+  dbHost: "postgres"
+  dbPort: "5432"
+  mlServiceHost: "ml-service"
+  mlServicePort: "8080"
+
+# Postgres settings
+postgres:
+  enabled: true
+  image: "postgres:15"
+  port: 5432
+  persistence:
+    enabled: true
+    size: 1Gi
+
+# Backend settings
+backend:
+  enabled: true
+  image: backend:latest
+  port: 8000
+  test:
+    enabled: false
+
+# ML Service settings
+mlService:
+  enabled: true
+  image: ml-service:latest
+  port: 8080
+  gigachatApiKey: "" # Must be set in --set or secret
+  test:
+    enabled: false
+
+# Frontend settings
+frontend:
+  enabled: true
+  image: interview-app:latest
+  port: 3000

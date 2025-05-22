@@ -1,5 +1,7 @@
 /.env
 .idea
-./deploy/vars.yml
+./ansible/vars.yml
 ./data
-./deploy/vars/vars.yml
+./ansible/vars/vars.yml
+./ansible/playbooks/vars/.env.yml
+./helm/values.yaml

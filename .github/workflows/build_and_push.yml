@@ -1,0 +1,33 @@
+name: Build and Push Docker Images
+
+on:
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Build and push Backend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/backend:latest backend
+          docker push ${{ secrets.DOCKER_LOGIN }}/backend:latest
+
+      - name: Build and push Frontend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/frontend:latest frontend/interview-app
+          docker push ${{ secrets.DOCKER_LOGIN }}/frontend:latest
+
+      - name: Build and push ML Service image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/ml_service:latest ml_service
+          docker push ${{ secrets.DOCKER_LOGIN }}/ml_service:latest
