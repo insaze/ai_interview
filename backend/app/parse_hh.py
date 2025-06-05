@@ -25,7 +25,14 @@ def _validate_response(response):
         raise requests.exceptions.RequestException(response.text)
 
 
+def get_html(url: str) -> str:
+    response = requests.get(url, headers=HEADERS)
+    _validate_response(response)
+    return response.text
+
+
 def parse_html(html: str) -> VacancyInfo:
+    html = html.replace('\xa0', ' ')
     soup = BeautifulSoup(html, 'html.parser')
 
     title = soup.find('h1', {'data-qa': 'vacancy-title'}).text
@@ -47,6 +54,5 @@ def parse_html(html: str) -> VacancyInfo:
 
 @lru_cache(maxsize=256)
 def parse_vacancy(url: str) -> VacancyInfo:
-    response = requests.get(url, headers=HEADERS)
-    _validate_response(response)
-    return parse_html(response.text)
+    html = get_html(url)
+    return parse_html(html)
