@@ -1,15 +1,16 @@
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+import time
+
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
+from prometheus_client import Counter, Histogram, start_http_server
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import PlainTextResponse
-import time
 
 from . import crud, schemas
 from .database import get_db
 
-from prometheus_client import start_http_server, Counter, Histogram, generate_latest, REGISTRY
+
 start_http_server(9001)
 
 REQUEST_COUNT = Counter(
@@ -40,12 +41,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class MetricsMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         method = request.method
         endpoint = request.url.path
         start_time = time.time()
-        
+
         try:
             response = await call_next(request)
         except Exception as e:
@@ -64,29 +66,32 @@ class MetricsMiddleware(BaseHTTPMiddleware):
                     method=method,
                     endpoint=endpoint,
                     status_code=str(status_code),
-                    error_type=f"{status_code//100}xx"
+                    error_type=f"{status_code // 100}xx"
                 ).inc()
-        
+
         latency = time.time() - start_time
         REQUEST_LATENCY.labels(
             method=method,
             endpoint=endpoint,
             status_code=str(status_code)
         ).observe(latency)
-        
+
         REQUEST_COUNT.labels(
             method=method,
             endpoint=endpoint,
             status_code=str(status_code)
         ).inc()
-        
+
         return response
 
+
 app.add_middleware(MetricsMiddleware)
+
 
 @app.get('/ping')
 def ping():
     return "pong"
+
 
 @app.post('/interviews', response_model=schemas.Interview)
 def create_interview(interview: schemas.InterviewCreate, db: Session = Depends(get_db)):

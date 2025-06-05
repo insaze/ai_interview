@@ -49,7 +49,9 @@ services:
       - "8001:8001"
     profiles:
       - tests
-    entrypoint: "poetry run python -m unittest"
+    entrypoint: "poetry run pytest --cov-report xml:coverage.xml --cov=app tests/"
+    volumes:
+      - ./coverage-reports/coverage.xml:/app/coverage.xml
 
   ml_service_tests:
     !!merge <<: *ml-service-common
