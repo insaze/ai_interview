@@ -1,0 +1,29 @@
+{{- if .Values.tgBot.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tg-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tg-bot
+  template:
+    metadata:
+      labels:
+        app: tg-bot
+    spec:
+      containers:
+        - name: tg-bot
+          image: {{ .Values.tgBot.image }}
+          env:
+            - name: TG_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tgToken
+                  key: TG_TOKEN
+            - name: ML_SERVICE_HOST
+              value: "{{ .Values.global.mlServiceHost }}"
+            - name: ML_SERVICE_PORT
+              value: "{{ .Values.global.mlServicePort }}"
+{{- end }}

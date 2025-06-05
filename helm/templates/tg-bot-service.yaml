@@ -1,0 +1,9 @@
+{{- if .Values.tgBot.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: tg-bot
+spec:
+  selector:
+    app: tg-bot
+{{- end }}

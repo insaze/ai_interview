@@ -82,7 +82,16 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
-      retries: 3  
+      retries: 3
+
+  tg_bot:
+    build: tg_bot
+    environment:
+      - TG_TOKEN=${TG_TOKEN}
+      - ML_SERVICE_HOST=${ML_SERVICE_HOST:-ml_service}
+      - ML_SERVICE_PORT=${ML_SERVICE_PORT:-8080}
+    networks:
+      - ai_interview_net
 
 volumes:
   postgres_data:
