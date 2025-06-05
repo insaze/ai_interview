@@ -20,7 +20,7 @@ spec:
             - name: TG_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: tgToken
+                  name: tg-token
                   key: TG_TOKEN
             - name: ML_SERVICE_HOST
               value: "{{ .Values.global.mlServiceHost }}"
