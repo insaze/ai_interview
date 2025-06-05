@@ -9,6 +9,11 @@ class TestAPISmoke(TestCase):
     def setUpClass(cls):
         cls.client = TestClient(app)
 
+    def test_ping(self):
+        response = self.client.get('/ping')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b'"pong"')
+
     def test_get_interviews(self):
         response = self.client.get('/interviews')
         self.assertEqual(response.status_code, 200)

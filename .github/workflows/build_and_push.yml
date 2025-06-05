@@ -31,3 +31,8 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_LOGIN }}/ml_service:latest ml_service
           docker push ${{ secrets.DOCKER_LOGIN }}/ml_service:latest
+
+      - name: Build and push TG Bot image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/tg_bot:latest tg_bot
+          docker push ${{ secrets.DOCKER_LOGIN }}/tg_bot:latest

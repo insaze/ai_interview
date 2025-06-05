@@ -39,3 +39,9 @@ frontend:
   enabled: true
   image: interview-app:latest
   port: 3000
+
+# Telegram Bot settings
+tgBot:
+  enabled: true
+  tgToken: "" # Must be set in --set or secret
+  image: tg-bot:latest

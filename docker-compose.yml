@@ -49,7 +49,9 @@ services:
       - "8001:8001"
     profiles:
       - tests
-    entrypoint: "poetry run python -m unittest"
+    entrypoint: "poetry run pytest --cov-report xml:coverage.xml --cov=app tests/"
+    volumes:
+      - ./coverage-reports/coverage.xml:/app/coverage.xml
 
   ml_service_tests:
     !!merge <<: *ml-service-common
@@ -80,7 +82,16 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
-      retries: 3  
+      retries: 3
+
+  tg_bot:
+    build: tg_bot
+    environment:
+      - TG_TOKEN=${TG_TOKEN}
+      - ML_SERVICE_HOST=${ML_SERVICE_HOST:-ml_service}
+      - ML_SERVICE_PORT=${ML_SERVICE_PORT:-8080}
+    networks:
+      - ai_interview_net
 
 volumes:
   postgres_data:

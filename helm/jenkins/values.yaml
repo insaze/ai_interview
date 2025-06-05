@@ -1,0 +1,81 @@
+# Override default jenkins chart values
+jenkins:
+  controller:
+    image: "jenkins/jenkins"
+    tag: "lts-jdk11"
+    installPlugins:
+      - kubernetes:1.31.6
+      - workflow-aggregator:2.11
+      - git:5.0.0
+      - docker-workflow:1.29
+      - kubernetes-cli:1.11.1
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+    servicePort: 8080
+    serviceType: NodePort
+    nodePort: 31000
+    jenkinsHome: "/var/jenkins_home"
+    serviceAccount:
+      create: true
+      name: "jenkins"
+    volumes:
+      - name: local-files
+        hostPath:
+          path: "/host-mount"
+          type: DirectoryOrCreate
+    volumeMounts:
+      - name: local-files
+        mountPath: "/mnt/local-files"
+        readOnly: false
+    additionalContainers:
+      - name: docker
+        image: docker:dind
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - name: docker-sock
+            mountPath: "/var/run/docker.sock"
+    additionalVolumes:
+      - name: docker-sock
+        hostPath:
+          path: "/var/run/docker.sock"
+
+  agent:
+    enabled: true
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+    podTemplates:
+      default: |
+        - name: kubectl
+          image: bitnami/kubectl
+          command: ['cat']
+          tty: true
+
+rbac:
+  create: true
+
+persistence:
+  enabled: true
+  size: "8Gi"
+  accessMode: "ReadWriteOnce"
+  storageClass: "standard"
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  hosts:
+    - host: "jenkins.local"
+      paths:
+        - path: "/"
+          pathType: "Prefix"
