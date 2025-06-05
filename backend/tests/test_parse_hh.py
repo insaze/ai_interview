@@ -3,7 +3,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 import requests
-from app.parse_hh import _validate_response, parse_vacancy
+from app.parse_hh import _validate_response, get_html, parse_vacancy
 
 
 class TestParseHH(TestCase):
@@ -32,3 +32,12 @@ class TestParseHH(TestCase):
         err_response = Mock(False, 'Error')
         with self.assertRaises(requests.exceptions.RequestException):
             _validate_response(err_response)
+
+    def test_get_html(self):
+        class MockResponse:
+            ok = True
+            text = '<html>Success</html>'
+
+        with patch('requests.get', return_value=MockResponse()):
+            result = get_html('http://example.com')
+            self.assertEqual(result, '<html>Success</html>')
