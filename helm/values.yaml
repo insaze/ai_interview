@@ -52,4 +52,4 @@ frontend:
 tgBot:
   enabled: true
   tgToken: "" # Must be set in --set or secret
-  image: wignorbo/tg_bot:latest
+  image: rosroble/tg_bot:latest
