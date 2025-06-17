@@ -33,11 +33,10 @@ jobs:
       run: |
         helm upgrade --install \
           --namespace ${{ env.NAMESPACE }} \
-          --create-namespace \
           --atomic \
-          --wait \
           --set-string "global.insecureSkipVerify=true" \
           --insecure-skip-tls-verify \
           ai-interview \
           ${{ env.HELM_CHART }} \
-          --values ${{ env.HELM_CHART }}/values.yaml
+          --values ${{ env.HELM_CHART }}/values.yaml \
+#         --wait \
