@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-slim as build
 
 ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
