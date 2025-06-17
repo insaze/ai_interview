@@ -2,9 +2,9 @@ name: Deploy to Kubernetes
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, lab4 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, lab4 ]
 
 env:
   CLUSTER_NAME: "kubernetes"
