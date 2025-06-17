@@ -9,7 +9,7 @@ on:
 env:
   CLUSTER_NAME: "kubernetes"
   NAMESPACE: "default"
-  HELM_CHART: "./helm"  # Path to your Helm chart
+  HELM_CHART: "./helm"
 
 jobs:
   deploy:
@@ -21,14 +21,13 @@ jobs:
     - name: Set up Helm
       uses: azure/setup-helm@v3
       with:
-        version: 'v3.13.2'  # Specify Helm version
+        version: 'v3.13.2'
 
     - name: Configure Kubernetes
       uses: azure/k8s-set-context@v3
       with:
         method: kubeconfig
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
-        kubeconfig-base64: true  # Critical for base64-encoded configs
 
     - name: Install/Upgrade Helm Chart
       run: |
@@ -37,6 +36,8 @@ jobs:
           --create-namespace \
           --atomic \
           --wait \
+          --set-string "global.insecureSkipVerify=true" \
+          --insecure-skip-tls-verify \
           ai-interview \
           ${{ env.HELM_CHART }} \
           --values ${{ env.HELM_CHART }}/values.yaml
