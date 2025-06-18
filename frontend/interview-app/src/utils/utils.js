@@ -29,13 +29,3 @@ export const truncateText = (str, maxLength) => {
     if (typeof str !== 'string') return '';
     return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
 };
-
-/**
- * Возвращает случайный элемент из массива.
- * @param {Array} array - Массив.
- * @returns {*} Случайный элемент или undefined.
- */
-export const getRandomItem = (array) => {
-    if (!Array.isArray(array) || array.length === 0) return undefined;
-    return array[Math.floor(Math.random() * array.length)];
-};
