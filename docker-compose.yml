@@ -51,7 +51,7 @@ services:
       - tests
     entrypoint: "poetry run pytest --cov-report=xml:coverage.xml --cov=app --cov-config=.coveragerc tests/"
     volumes:
-      - ./backend:/app
+      - ./backend:/backend
 
   ml_service_tests:
     !!merge <<: *ml-service-common
