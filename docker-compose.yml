@@ -49,7 +49,7 @@ services:
       - "8001:8001"
     profiles:
       - tests
-    entrypoint: "poetry run pytest --cov-report=xml:coverage/coverage.xml --cov=app --cov-config=.coveragerc tests/"
+    entrypoint: "poetry run pytest --cov-report=xml:coverage.xml --cov=app --cov-config=.coveragerc tests/"
     volumes:
       - ./backend:/app
 
