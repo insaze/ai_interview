@@ -45,6 +45,7 @@ mlService:
 frontend:
   enabled: true
   image: rosroble/frontend:latest
+  apiBaseURL: http://localhost:8000
   port: 3000
 
 

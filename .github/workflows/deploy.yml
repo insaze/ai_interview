@@ -35,6 +35,7 @@ jobs:
           --namespace ${{ env.NAMESPACE }} \
           --atomic \
           --set-string "global.insecureSkipVerify=true" \
+          --set frontend.apiBaseURL="${{ vars.API_BASE_URL }}"
           --insecure-skip-tls-verify \
           ai-interview \
           ${{ env.HELM_CHART }} \
