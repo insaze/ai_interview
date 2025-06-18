@@ -14,6 +14,7 @@ spec:
       protocol: TCP
       port: {{ .Values.backend.port }}
       targetPort: {{ .Values.backend.port }}
+      nodePort: {{ .Values.backend.port }}
     - name: metrics
       port: 9001
       targetPort: 9001
