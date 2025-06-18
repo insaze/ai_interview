@@ -25,19 +25,7 @@
     "collectCoverage": true,
     "coverageReporters": [
       "text",
-      "cobertura",
       "lcov"
-    ],
-    "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "test-results",
-          "outputName": "junit.xml",
-          "usePathForSuiteName": true
-        }
-      ]
     ]
   },
   "eslintConfig": {
