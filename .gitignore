@@ -11,4 +11,3 @@
 /data/questions.csv
 /ansible/vars.yml
 /ansible/vault.yml
-backend/app/__pycache__
