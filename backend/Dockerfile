@@ -7,9 +7,9 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 
 RUN pip install "poetry==$POETRY_VERSION"
 
-WORKDIR /app
+WORKDIR /backend
 
-COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml poetry.lock /backend/
 RUN poetry install --only=main --no-root
 
 COPY . .
