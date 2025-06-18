@@ -6,6 +6,7 @@ metadata:
   labels:
     app: backend
 spec:
+  type: NodePort
   selector:
     app: backend
   ports:
@@ -13,6 +14,7 @@ spec:
       protocol: TCP
       port: {{ .Values.backend.port }}
       targetPort: {{ .Values.backend.port }}
+      nodePort: 30002
     - name: metrics
       port: 9001
       targetPort: 9001
