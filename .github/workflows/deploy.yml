@@ -44,7 +44,6 @@ jobs:
         helm dependency update ${{ env.HELM_CHART }}
         helm upgrade --install \
           --namespace ${{ env.NAMESPACE }} \
-          --atomic \
           --timeout 8m \
           --insecure-skip-tls-verify \
           --set frontend.apiBaseURL="${{ secrets.API_BASE_URL }}" \
