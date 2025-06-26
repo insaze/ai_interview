@@ -41,12 +41,13 @@ jobs:
     - name: Install/Upgrade Helm Chart
       run: |
         source ~/vk-cloud-solutions/path.bash.inc
+        helm dependency update ${{ env.HELM_CHART }}
         helm upgrade --install \
           --namespace ${{ env.NAMESPACE }} \
           --atomic \
-          --set-string "global.insecureSkipVerify=true" \
-          --set frontend.apiBaseURL="${{ secrets.API_BASE_URL }}" \
+          --timeout 8m \
           --insecure-skip-tls-verify \
+          --set frontend.apiBaseURL="${{ secrets.API_BASE_URL }}" \
           ai-interview \
           ${{ env.HELM_CHART }} \
           --values ${{ env.HELM_CHART }}/values.yaml \
