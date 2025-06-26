@@ -36,7 +36,7 @@ jobs:
 
     - name: Test kubectl access
       run: |
-        kubectl version --short
+        kubectl version
     
     - name: Install/Upgrade Helm Chart
       run: |
