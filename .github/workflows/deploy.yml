@@ -32,6 +32,7 @@ jobs:
     - name: Install/Upgrade Helm Chart
       run: |
         curl -sSL https://hub.mcs.mail.ru/repository/client-keystone-auth/latest/linux/client-install.sh | bash
+        source "/home/runner/.bashrc"
         helm upgrade --install \
           --namespace ${{ env.NAMESPACE }} \
           --atomic \
