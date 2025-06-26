@@ -23,7 +23,7 @@ jobs:
     - name: Install client-keystone-auth
       run: |
         curl -sSL https://hub.mcs.mail.ru/repository/client-keystone-auth/latest/linux/client-install.sh  | bash
-        export PATH=$HOME/vk-cloud-solutions/bin:$PATH
+        source ~/vk-cloud-solutions/path.bash.inc
 
     - name: Configure Kubernetes
       uses: azure/k8s-set-context@v3
@@ -33,10 +33,12 @@ jobs:
 
     - name: Test kubectl access
       run: |
+        source ~/vk-cloud-solutions/path.bash.inc
         kubectl version
     
     - name: Install/Upgrade Helm Chart
       run: |
+        source ~/vk-cloud-solutions/path.bash.inc
         helm upgrade --install \
           --namespace ${{ env.NAMESPACE }} \
           --atomic \
