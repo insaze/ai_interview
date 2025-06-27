@@ -29,7 +29,7 @@ backend:
   test:
     enabled: false
   autoscaling:
-    minReplicas: 2
+    minReplicas: 1
     maxReplicas: 10
     metricType: cpu
     targetAverageUtilization: 15
