@@ -1,3 +1,6 @@
+imagePullSecrets:
+  - name: regcred
+
 # Global configuration shared between services
 global:
   dbUsername: "postgres"
@@ -16,32 +19,41 @@ postgres:
   persistence:
     enabled: true
     size: 1Gi
+    storageClass: local-storage
 
 # Backend settings
 backend:
   enabled: true
-  image: backend:latest
+  image: docker.io/wignorbo/backend:latest
   port: 8000
   test:
     enabled: false
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 10
+    metricType: cpu
+    targetAverageUtilization: 15
+    enabled: true
 
 # ML Service settings
 mlService:
   enabled: true
-  image: ml-service:latest
+  image: docker.io/wignorbo/ml_service:latest
   port: 8080
-  gigachatApiKey: "" # Must be set in --set or secret
+  gigachatApiKey:
   test:
     enabled: false
 
 # Frontend settings
 frontend:
   enabled: true
-  image: interview-app:latest
+  image: docker.io/wignorbo/frontend:latest
+  apiBaseURL: http://localhost:8000
   port: 3000
+
 
 # Telegram Bot settings
 tgBot:
   enabled: true
   tgToken: "" # Must be set in --set or secret
-  image: tg-bot:latest
+  image: docker.io/wignorbo/tg_bot:latest

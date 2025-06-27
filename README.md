@@ -74,6 +74,20 @@ brew install minikube helm
 minikube addons enable metrics-server
 ```
 
+Далее нужно добавить репозиторий `Prometheus` для мониторинга:
+
+```shell
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
+
+Добавить секреты:
+
+```shell
+kubectl create secret generic gigachat2 --from-literal=GIGACHAT_API_KEY='<api-key>'
+kubectl create secret generic tg-token --from-literal=TG_TOKEN='<token-key>'
+```
+
 ### Запуск кластера
 
 ```shell
@@ -88,4 +102,10 @@ minikube status
 kubectl get pods
 kubectl get services
 kubectl get hpa
+```
+
+Накатить обновление:
+
+```shell
+helm upgrade ai-interview helm
 ```

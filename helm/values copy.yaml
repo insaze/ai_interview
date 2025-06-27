@@ -20,28 +20,28 @@ postgres:
 # Backend settings
 backend:
   enabled: true
-  image: backend:latest
+  image: rosroble/backend:latest
   port: 8000
   test:
     enabled: false
+  autoscaling:
+    minReplicas: 2
+    maxReplicas: 10
+    metricType: cpu
+    targetAverageUtilization: 15
+    enabled: true
 
 # ML Service settings
 mlService:
   enabled: true
-  image: ml-service:latest
+  image: rosroble/ml_service:latest
   port: 8080
-  gigachatApiKey: "" # Must be set in --set or secret
+  gigachatApiKey:
   test:
     enabled: false
 
 # Frontend settings
 frontend:
   enabled: true
-  image: interview-app:latest
+  image: rosroble/frontend:latest
   port: 3000
-
-# Telegram Bot settings
-tgBot:
-  enabled: true
-  tgToken: "" # Must be set in --set or secret
-  image: tg-bot:latest

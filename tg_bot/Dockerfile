@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-slim as build
 
 ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -7,11 +7,11 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 
 RUN pip install "poetry==$POETRY_VERSION"
 
-WORKDIR /home/runner/work/ai_interview/ai_interview/backend
+WORKDIR /app
 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml poetry.lock /app/
 RUN poetry install --only=main --no-root
 
 COPY . .
 
-CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "python", "app/main.py"]

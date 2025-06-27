@@ -5,3 +5,9 @@
 ./ansible/vars/vars.yml
 ./ansible/playbooks/vars/.env.yml
 ./helm/values.yaml
+/ansible/playbooks/vars/.env.yml
+/data/answers.csv
+/helm/templates/ingress.yaml
+/data/questions.csv
+/ansible/vars.yml
+/ansible/vault.yml

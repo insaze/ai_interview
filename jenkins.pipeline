@@ -1,0 +1,43 @@
+pipeline {
+    agent {
+        kubernetes {
+            label 'helm-runner'
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  serviceAccountName: jenkins-executor
+  securityContext:
+    runAsUser: 0
+  containers:
+  - name: helm
+    image: alpine/helm:3.12.3
+    command: ['sleep', 'infinity']
+  - name: kubectl
+    image: bitnami/kubectl:latest
+    command: ['sleep', 'infinity']
+"""
+        }
+    }
+    stages {
+        stage('Prepare Files') {
+            agent { label 'built-in' }  // Runs on master where files exist
+            steps {
+                dir('/mnt/local-files') {
+                    stash name: 'helm-chart', includes: '**/*'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                container('helm') {
+                    unstash 'helm-chart'
+                    sh '''
+                        helm upgrade ai-interview helm --namespace=default
+                    '''
+                }
+            }
+        }
+    }
+}
