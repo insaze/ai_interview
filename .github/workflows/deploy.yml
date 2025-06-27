@@ -83,7 +83,7 @@ jobs:
           -n ${{ env.NAMESPACE }}
         helm dependency update ${{ env.HELM_CHART }}
         helm upgrade --install \
-          --atomic
+          --atomic \
           --namespace ${{ env.NAMESPACE }} \
           --insecure-skip-tls-verify \
           --set frontend.apiBaseURL="${{ secrets.API_BASE_URL }}" \
