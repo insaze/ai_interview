@@ -10,10 +10,43 @@ env:
   CLUSTER_NAME: "kubernetes"
   NAMESPACE: "default"
   HELM_CHART: "./helm"
+  IMAGE_PULL_SECRETS_KEY: "regcred"
 
 jobs:
-  deploy:
+  build-and-push:
+    name: "Build and push to docker registry"
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Build and push Backend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/backend:latest backend
+          docker push ${{ secrets.DOCKER_LOGIN }}/backend:latest
+
+      - name: Build and push Frontend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/frontend:latest frontend/interview-app
+          docker push ${{ secrets.DOCKER_LOGIN }}/frontend:latest
+
+      - name: Build and push ML Service image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/ml_service:latest ml_service
+          docker push ${{ secrets.DOCKER_LOGIN }}/ml_service:latest
+
+      - name: Build and push TG Bot image
+        run: |
+          docker build -t ${{ secrets.DOCKER_LOGIN }}/tg_bot:latest tg_bot
+          docker push ${{ secrets.DOCKER_LOGIN }}/tg_bot:latest
+  deploy:
+    name: "Deploy to k8s"
+    runs-on: ubuntu-latest
+    needs: build-and-push
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -41,6 +74,13 @@ jobs:
     - name: Install/Upgrade Helm Chart
       run: |
         source ~/vk-cloud-solutions/path.bash.inc
+        kubectl delete secret ${{ env.IMAGE_PULL_SECRETS_KEY }} -n ${{ env.NAMESPACE }}
+        kubectl create secret docker-registry ${{ env.IMAGE_PULL_SECRETS_KEY }} \
+          --docker-server=https://index.docker.io/v1/  \
+          --docker-username=${{ secrets.DOCKER_LOGIN }} \
+          --docker-password=${{ secrets.ACCESS_TOKEN }} \
+          --docker-email=${{ secrets.DOCKER_EMAIL }} \
+          -n ${{ env.NAMESPACE }}
         helm dependency update ${{ env.HELM_CHART }}
         helm upgrade --install \
           --namespace ${{ env.NAMESPACE }} \

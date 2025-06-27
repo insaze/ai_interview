@@ -13,6 +13,9 @@ spec:
       labels:
         app: ml-service
     spec:
+      { { - if .Values.imagePullSecrets } }
+      imagePullSecrets: { { toYaml .Values.imagePullSecrets | nindent 8 } }
+      { { - end } }
       containers:
         - name: ml-service
           image: {{ .Values.mlService.image }}

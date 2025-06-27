@@ -1,3 +1,6 @@
+imagePullSecrets:
+  - name: regcred
+
 # Global configuration shared between services
 global:
   dbUsername: "postgres"

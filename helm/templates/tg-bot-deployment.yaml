@@ -13,6 +13,9 @@ spec:
       labels:
         app: tg-bot
     spec:
+      { { - if .Values.imagePullSecrets } }
+      imagePullSecrets: { { toYaml .Values.imagePullSecrets | nindent 8 } }
+      { { - end } }
       containers:
         - name: tg-bot
           image: {{ .Values.tgBot.image }}

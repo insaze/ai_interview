@@ -17,6 +17,9 @@ spec:
       labels:
         app: backend
     spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 8 }}
+      {{- end }}
       containers:
         - name: backend
           image: {{ .Values.backend.image }}
