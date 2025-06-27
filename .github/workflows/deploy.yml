@@ -76,10 +76,10 @@ jobs:
         source ~/vk-cloud-solutions/path.bash.inc
         
         kubectl delete secret tg-token -n ${{ env.NAMESPACE }} --ignore-not-found
-        kubectl create secret generic tg-token --from-literal=${{ secrets.TG_TOKEN }} -n ${{ env.NAMESPACE }}
+        kubectl create secret generic tg-token --from-literal=TG_TOKEN=${{ secrets.TG_TOKEN }} -n ${{ env.NAMESPACE }}
         
         kubectl delete secret gigachat2 -n ${{ env.NAMESPACE }} --ignore-not-found
-        kubectl create secret generic gigachat2 --from-literal=${{ secrets.GIGACHAT_API_KEY }} -n ${{ env.NAMESPACE }}
+        kubectl create secret generic gigachat2 --from-literal=GIGACHAT_API_KEY=${{ secrets.GIGACHAT_API_KEY }} -n ${{ env.NAMESPACE }}
         
         kubectl delete secret ${{ env.IMAGE_PULL_SECRETS_KEY }} -n ${{ env.NAMESPACE }} --ignore-not-found
         kubectl create secret docker-registry ${{ env.IMAGE_PULL_SECRETS_KEY }} \
