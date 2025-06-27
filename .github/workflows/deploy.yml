@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Deploy
 
 on:
   push:
@@ -74,7 +74,7 @@ jobs:
     - name: Install/Upgrade Helm Chart
       run: |
         source ~/vk-cloud-solutions/path.bash.inc
-        kubectl delete secret ${{ env.IMAGE_PULL_SECRETS_KEY }} -n ${{ env.NAMESPACE }}
+        kubectl delete secret ${{ env.IMAGE_PULL_SECRETS_KEY }} -n ${{ env.NAMESPACE }} --ignore-not-found
         kubectl create secret docker-registry ${{ env.IMAGE_PULL_SECRETS_KEY }} \
           --docker-server=https://index.docker.io/v1/  \
           --docker-username=${{ secrets.DOCKER_LOGIN }} \
@@ -83,8 +83,8 @@ jobs:
           -n ${{ env.NAMESPACE }}
         helm dependency update ${{ env.HELM_CHART }}
         helm upgrade --install \
+          --atomic
           --namespace ${{ env.NAMESPACE }} \
-          --timeout 8m \
           --insecure-skip-tls-verify \
           --set frontend.apiBaseURL="${{ secrets.API_BASE_URL }}" \
           ai-interview \
